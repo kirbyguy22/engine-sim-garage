@@ -66,7 +66,7 @@ public node b4_camshaft_builder {
 public node b4_camshaft {
     alias output __out:
         b4_camshaft_builder(
-            advance: 24 * units.deg,
+            advance: 0 * units.deg,
             intake_lobe_center: 112 * units.deg,
             exhaust_lobe_center: 112 * units.deg);
 }
@@ -98,7 +98,7 @@ public node subaru_ej25 {
         moment_of_inertia: 0.22986844776863666 * 0.9,
         position_x: 0.0,
         position_y: 0.0,
-        tdc: -constants.pi / 2 - constants.pi / 8
+        tdc: -constants.pi / 2 - constants.pi / 6
     )
 
     rod_journal rj0(angle: -constants.pi / 2.0)
