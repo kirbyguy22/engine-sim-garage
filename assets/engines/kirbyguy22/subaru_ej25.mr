@@ -66,7 +66,7 @@ public node b4_camshaft_builder {
 public node b4_camshaft {
     alias output __out:
         b4_camshaft_builder(
-            advance: 0 * units.deg,
+            advance: 24 * units.deg,
             intake_lobe_center: 112 * units.deg,
             exhaust_lobe_center: 112 * units.deg);
 }
@@ -98,7 +98,7 @@ public node subaru_ej25 {
         moment_of_inertia: 0.22986844776863666 * 0.9,
         position_x: 0.0,
         position_y: 0.0,
-        tdc: -constants.pi / 2 - constants.pi / 6
+        tdc: constants.pi - constants.pi / 8
     )
 
     rod_journal rj0(angle: -constants.pi / 2.0)
@@ -155,8 +155,8 @@ public node subaru_ej25 {
         volume: 50.0 * units.L
     )
 
-    impulse_response ir0(filename: "../../smooth_39.wav", volume: 0.01)
-	impulse_response ir1(filename: "../../smooth_39.wav", volume: 0.01)
+    impulse_response ir0(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.01)
+	impulse_response ir1(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.01)
     exhaust_system exhaust0(es_params, audio_volume: 8.0, impulse_response: ir0)
 	exhaust_system exhaust1(es_params1, audio_volume: 10.0, impulse_response: ir1)
 
