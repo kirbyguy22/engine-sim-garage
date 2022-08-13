@@ -4,7 +4,6 @@
 Tested working on Build v0.1.4a.
 
 ## Installing an engine
----
 1. Clone/download the repo and copy the `assets` folder from it into the `engine-sim` root folder.
 2. Edit `engine-sim/assets/main.mr` and add `import` line(s) for the new engines:  
 `import "kirbyguy22/engines/toyota_2jz_ge.mr"`
@@ -16,7 +15,6 @@ set_engine(
 ```
 
 ## Available Engines
----
 | Origin | Manufacturer | Engine | Layout | Displacement (L) | Asset Name | Author |
 | --- | ------------ | ------ | ------ | ---------------- | ---------- | ------ |
 | JPN | TOYOTA | 2JZ-GE | I6 | 3.0 | toyota_2jz_ge | kirbyguy22 |
