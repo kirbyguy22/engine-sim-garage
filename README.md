@@ -20,4 +20,4 @@ set_engine(
 | JPN | TOYOTA | 2JZ-GE | I6 | 3.0 | toyota_2jz_ge | kirbyguy22 |
 | JPN | SUBARU | EJ25 | F4 | 2.5 | subaru_ej25 | kirbyguy22 |
 | JPN | HONDA | C30A | V6 | 3.0 | honda_c30a | kirbyguy22 |
-| USA | DODGE | VIPER ZB I | V10 | 8.0 | dodge_viper_zbi | kirbyguy22 |
+| USA | DODGE | VIPER SR II | V10 | 8.0 | dodge_viper_srii | kirbyguy22 |
