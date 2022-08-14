@@ -21,3 +21,4 @@ set_engine(
 | JPN | SUBARU | EJ25 | F4 | 2.5 | subaru_ej25 | kirbyguy22 |
 | JPN | HONDA | C30A | V6 | 3.0 | honda_c30a | kirbyguy22 |
 | USA | DODGE | VIPER SR II | V10 | 8.0 | dodge_viper_srii | kirbyguy22 |
+| GER | PORSCHE | 980/01 | V10 | 5.7 | porsche_980_01 | kirbyguy22 |
