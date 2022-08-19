@@ -5,11 +5,9 @@ units units()
 constants constants()
 
 label cycle(2 * 360 * units.deg)
-label cycle90( 90 * units.deg)
 label cycle144( 144 * units.deg)
 label cycle54(54 * units.deg)
-label cycle45(45 * units.deg)
-label cycle36(36 * units.deg)
+label ign_offset(-5 * units.deg)
 
 public node v10_unev_distributor {
     input wires;
@@ -19,22 +17,22 @@ public node v10_unev_distributor {
     alias output __out:
         ignition_module(timing_curve: timing_curve, rev_limit: rev_limit, limiter_duration: limiter_duration)
             .connect_wire(wires.wire1, 0)
-            .connect_wire(wires.wire10, cycle90)
+            .connect_wire(wires.wire10, cycle54)
             .connect_wire(wires.wire9, 1 * cycle144)
-            .connect_wire(wires.wire4, 1 * cycle144 + cycle90)
+            .connect_wire(wires.wire4, 1 * cycle144 + cycle54)
             .connect_wire(wires.wire3, 2 * cycle144)
-            .connect_wire(wires.wire6, 2 * cycle144 + cycle90)
+            .connect_wire(wires.wire6, 2 * cycle144 + cycle54)
             .connect_wire(wires.wire5, 3 * cycle144)
-            .connect_wire(wires.wire8, 3 * cycle144 + cycle90)
+            .connect_wire(wires.wire8, 3 * cycle144 + cycle54)
             .connect_wire(wires.wire7, 4 * cycle144)
-            .connect_wire(wires.wire2, 4 * cycle144 + cycle90);
+            .connect_wire(wires.wire2, 4 * cycle144 + cycle54);
 }
 
 
 public node viper_v10_lobe_in_profile {
     alias output __out:
         harmonic_cam_lobe(
-            duration_at_50_thou: 220 * units.deg,
+            duration_at_50_thou: 212 * units.deg,
             gamma: 0.8,
             lift: 542 * units.thou,
             steps: 100
@@ -77,7 +75,6 @@ public node v10_unev_camshaft_builder {
     camshaft _exhaust_cam_0(params, lobe_profile: exhaust_lobe_profile)
 	camshaft _exhaust_cam_1(params, lobe_profile: exhaust_lobe_profile)
 
-    label rot90(90 * units.deg)
 	label rot54(54 * units.deg)
 	label rot144(144 * units.deg)
     label rot360(360 * units.deg)
@@ -90,11 +87,11 @@ public node v10_unev_camshaft_builder {
 		.add_lobe(rot360 - exhaust_lobe_center + 1 * rot144 - 0.08)
 		
     _exhaust_cam_1
-        .add_lobe(rot360 - exhaust_lobe_center + 4 * rot144 + rot90 - 0.06)
-        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot144 + rot90 - 0.03)
-        .add_lobe(rot360 - exhaust_lobe_center + 2 * rot144 + rot90 + 0.06)
-        .add_lobe(rot360 - exhaust_lobe_center + 3 * rot144 + rot90 - 0.03)
-        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot90 - 0.06)
+        .add_lobe(rot360 - exhaust_lobe_center + 4 * rot144 + rot54 - 0.06)
+        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot144 + rot54 - 0.03)
+        .add_lobe(rot360 - exhaust_lobe_center + 2 * rot144 + rot54 + 0.06)
+        .add_lobe(rot360 - exhaust_lobe_center + 3 * rot144 + rot54 - 0.03)
+        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot54 - 0.06)
 
     _intake_cam_0
         .add_lobe(rot360 + intake_lobe_center)
@@ -104,19 +101,19 @@ public node v10_unev_camshaft_builder {
         .add_lobe(rot360 + intake_lobe_center + 1 * rot144 + 0.08)
 		
     _intake_cam_1
-        .add_lobe(rot360 + intake_lobe_center + 4 * rot144 + rot90)
-        .add_lobe(rot360 + intake_lobe_center + 1 * rot144 + rot90 + 0.02)
-        .add_lobe(rot360 + intake_lobe_center + 2 * rot144 + rot90 + 0.04)
-        .add_lobe(rot360 + intake_lobe_center + 3 * rot144 + rot90 + 0.06)
-        .add_lobe(rot360 + intake_lobe_center + 1 * rot90 + 0.08)
+        .add_lobe(rot360 + intake_lobe_center + 4 * rot144 + rot54)
+        .add_lobe(rot360 + intake_lobe_center + 1 * rot144 + rot54 + 0.02)
+        .add_lobe(rot360 + intake_lobe_center + 2 * rot144 + rot54 + 0.04)
+        .add_lobe(rot360 + intake_lobe_center + 3 * rot144 + rot54 + 0.06)
+        .add_lobe(rot360 + intake_lobe_center + 1 * rot54 + 0.08)
 }
 
 public node v10_unev_camshaft {
     alias output __out:
         v10_unev_camshaft_builder(
-            advance: -6 * units.deg,
-            intake_lobe_center: 117 * units.deg,
-            exhaust_lobe_center: 111 * units.deg);
+            advance: -10 * units.deg,
+            intake_lobe_center: 114 * units.deg,
+            exhaust_lobe_center: 114 * units.deg);
 }
 
 public node viper_intake {
@@ -128,14 +125,14 @@ public node viper_intake {
     alias output __out: intake;
 
     intake intake(
-        plenum_volume: 8.0 * units.L,
+        plenum_volume: 4.0 * units.L,
         plenum_cross_section_area: 100.0 * units.cm2,
         intake_flow_rate: k_carb(carburetor_cfm),
         idle_flow_rate: k_carb(idle_flow_rate_cfm),
         idle_throttle_plate_position: idle_throttle_plate_position,
         throttle_gamma: throttle_gamma,
         runner_flow_rate: k_carb(500.0),
-        runner_length: 5.5 * units.inch,
+        runner_length: 6.0 * units.inch,
         velocity_decay: 0.1
     )
 }
@@ -160,8 +157,10 @@ public node dodge_viper_srii {
     engine engine(
         name: "Dodge Viper V10 (SR II)",
         starter_torque: 200 * units.lb_ft,
-        starter_speed: 800 * units.rpm,
-        redline: 6000 * units.rpm
+        starter_speed: 200 * units.rpm,
+        redline: 6000 * units.rpm,
+		fuel: fuel(
+            burning_efficiency_randomness: 0.5)
     )
 
     wires wires()
@@ -174,7 +173,7 @@ public node dodge_viper_srii {
         moment_of_inertia: 0.22986844776863666 * 2.0,
         position_x: 0.0,
         position_y: 0.0,
-        tdc: constants.pi / 4 + constants.pi / 16
+        tdc: constants.pi / 4.0
     )
 
     rod_journal rj0(angle: 0)
@@ -183,23 +182,12 @@ public node dodge_viper_srii {
 	rod_journal rj6(angle: 4 * cycle144)
 	rod_journal rj8(angle: 1 * cycle144)
 	
-	rod_journal rj1(angle: -cycle144-cycle36 + 4 * cycle144)
-	rod_journal rj3(angle: -cycle144-cycle36 + 1 * cycle144)
-	rod_journal rj5(angle: -cycle144-cycle36 + 2 * cycle144)
-	rod_journal rj7(angle: -cycle144-cycle36 + 3 * cycle144)
-	rod_journal rj9(angle: -cycle144-cycle36)
-	
     c0
         .add_rod_journal(rj0)
-		.add_rod_journal(rj1)
 		.add_rod_journal(rj2)
-		.add_rod_journal(rj3)
         .add_rod_journal(rj4)
-		.add_rod_journal(rj5)
 		.add_rod_journal(rj6)
-		.add_rod_journal(rj7)
 		.add_rod_journal(rj8)
-		.add_rod_journal(rj9)
 
     piston_parameters piston_params(
         mass: 598 * units.g,
@@ -222,29 +210,22 @@ public node dodge_viper_srii {
     )
 
     viper_intake intake(
-        carburetor_cfm: 850.0,
+        carburetor_cfm: 950.0,
         idle_flow_rate_cfm: 0.007,
-        idle_throttle_plate_position: 0.981,
+        idle_throttle_plate_position: 0.976,
         throttle_gamma: 1.5
     )
 
     exhaust_system_parameters es_params(
-        outlet_flow_rate: k_carb(750.0),
-        primary_tube_length: 10.0 * units.inch,
-        primary_flow_rate: k_carb(150.0),
-        velocity_decay: 0.5, //0.5
-        volume: 50.0 * units.L
-    )
-	
-    exhaust_system_parameters es_params1(
         outlet_flow_rate: k_carb(950.0),
-        primary_tube_length: 30.0 * units.inch,
-        primary_flow_rate: k_carb(150.0),
-        velocity_decay: 0.2, //0.5
+        primary_tube_length: 36.0 * units.inch,
+        primary_flow_rate: k_carb(300.0),
+        velocity_decay: 1.0, //0.5
         volume: 50.0 * units.L
     )
 
-    impulse_response ir0(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.001)
+
+    impulse_response ir0(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.01)
 	impulse_response ir1(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.01)
     exhaust_system exhaust0(es_params, audio_volume: 8.0, impulse_response: ir0)
 	exhaust_system exhaust1(es_params, audio_volume: 10.0, impulse_response: ir1)
@@ -260,7 +241,7 @@ public node dodge_viper_srii {
             ignition_wire: wires.wire1
         )
         .add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.2)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj2,
             intake: intake,
@@ -284,7 +265,7 @@ public node dodge_viper_srii {
             ignition_wire: wires.wire7
         )
         .add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.2)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj8,
             intake: intake,
@@ -297,15 +278,15 @@ public node dodge_viper_srii {
 		.add_cylinder(
             piston: piston(piston_params, blowby: k_28inH2O(0.1)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj1,
+            rod_journal: rj0,
             intake: intake,
             exhaust_system: exhaust1,
             ignition_wire: wires.wire2
         )
 		.add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.3)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj3,
+            rod_journal: rj2,
             intake: intake,
             exhaust_system: exhaust1,
             ignition_wire: wires.wire4
@@ -313,15 +294,15 @@ public node dodge_viper_srii {
 		.add_cylinder(
             piston: piston(piston_params, blowby: k_28inH2O(0.1)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj5,
+            rod_journal: rj4,
             intake: intake,
             exhaust_system: exhaust1,
             ignition_wire: wires.wire6
         )
 		.add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.2)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj7,
+            rod_journal: rj6,
             intake: intake,
             exhaust_system: exhaust1,
             ignition_wire: wires.wire8
@@ -329,7 +310,7 @@ public node dodge_viper_srii {
 		.add_cylinder(
             piston: piston(piston_params, blowby: k_28inH2O(0.1)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj9,
+            rod_journal: rj8,
             intake: intake,
             exhaust_system: exhaust1,
             ignition_wire: wires.wire10
@@ -362,14 +343,13 @@ public node dodge_viper_srii {
 
     function timing_curve(1000 * units.rpm)
     timing_curve
-        .add_sample(0000 * units.rpm, 10 * units.deg)
-        .add_sample(1000 * units.rpm, 14 * units.deg)
-        .add_sample(2000 * units.rpm, 16 * units.deg)
-        .add_sample(3000 * units.rpm, 18 * units.deg)
-        .add_sample(4000 * units.rpm, 20 * units.deg)
-        .add_sample(5000 * units.rpm, 28 * units.deg)
-        .add_sample(6000 * units.rpm, 30 * units.deg)
-        .add_sample(7000 * units.rpm, 30 * units.deg)
+        .add_sample(0000 * units.rpm, 26 * units.deg + ign_offset)
+        .add_sample(1000 * units.rpm, 29 * units.deg + ign_offset)
+        .add_sample(2000 * units.rpm, 31 * units.deg + ign_offset)
+        .add_sample(3000 * units.rpm, 32 * units.deg + ign_offset)
+        .add_sample(4000 * units.rpm, 32 * units.deg + ign_offset)
+        .add_sample(5000 * units.rpm, 33 * units.deg + ign_offset)
+        .add_sample(6000 * units.rpm, 33 * units.deg + ign_offset)
 
     engine.add_ignition_module(
         v10_unev_distributor(
