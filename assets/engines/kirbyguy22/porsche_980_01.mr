@@ -7,10 +7,8 @@ constants constants()
 label cycle(2 * 360 * units.deg)
 label cycle90( 90 * units.deg)
 label cycle68( 68 * units.deg)
-label cycle76( 76 * units.deg)
 label cycle144( 144 * units.deg)
-label cycle54(54 * units.deg)
-label cycle45(45 * units.deg)
+label ign_offset(10)
 
 public node porsche_v10_distributor {
     input wires;
@@ -20,15 +18,15 @@ public node porsche_v10_distributor {
     alias output __out:
         ignition_module(timing_curve: timing_curve, rev_limit: rev_limit, limiter_duration: limiter_duration)
             .connect_wire(wires.wire1, 0)
-            .connect_wire(wires.wire2, cycle76)
+            .connect_wire(wires.wire2, cycle68)
             .connect_wire(wires.wire9, 1 * cycle144)
-            .connect_wire(wires.wire10, 1 * cycle144 + cycle76)
+            .connect_wire(wires.wire10, 1 * cycle144 + cycle68)
             .connect_wire(wires.wire3, 2 * cycle144)
-            .connect_wire(wires.wire4, 2 * cycle144 + cycle76)
+            .connect_wire(wires.wire4, 2 * cycle144 + cycle68)
             .connect_wire(wires.wire5, 3 * cycle144)
-            .connect_wire(wires.wire6, 3 * cycle144 + cycle76)
+            .connect_wire(wires.wire6, 3 * cycle144 + cycle68)
             .connect_wire(wires.wire7, 4 * cycle144)
-            .connect_wire(wires.wire8, 4 * cycle144 + cycle76);
+            .connect_wire(wires.wire8, 4 * cycle144 + cycle68);
 }
 
 
@@ -45,7 +43,7 @@ public node porsche_v10_lobe_in_profile {
 public node porsche_v10_lobe_ex_profile {
     alias output __out:
         harmonic_cam_lobe(
-            duration_at_50_thou: 220 * units.deg,
+            duration_at_50_thou: 238 * units.deg,
             gamma: 0.8,
             lift: 542 * units.thou,
             steps: 100
@@ -79,9 +77,7 @@ public node porsche_v10_camshaft_builder {
 	camshaft _exhaust_cam_1(params, lobe_profile: exhaust_lobe_profile)
 
     label rot90(90 * units.deg)
-	label rot76(76* units.deg)
 	label rot68(68* units.deg)
-	label rot54(54 * units.deg)
 	label rot144(144 * units.deg)
     label rot360(360 * units.deg)
 
@@ -93,11 +89,11 @@ public node porsche_v10_camshaft_builder {
 		.add_lobe(rot360 - exhaust_lobe_center + 1 * rot144)
 		
     _exhaust_cam_1
-        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot76)
-        .add_lobe(rot360 - exhaust_lobe_center + 2 * rot144 + rot76)
-        .add_lobe(rot360 - exhaust_lobe_center + 3 * rot144 + rot76)
-        .add_lobe(rot360 - exhaust_lobe_center + 4 * rot144 + rot76)
-        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot144 + rot76)
+        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot68)
+        .add_lobe(rot360 - exhaust_lobe_center + 2 * rot144 + rot68)
+        .add_lobe(rot360 - exhaust_lobe_center + 3 * rot144 + rot68)
+        .add_lobe(rot360 - exhaust_lobe_center + 4 * rot144 + rot68)
+        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot144 + rot68)
 
     _intake_cam_0
         .add_lobe(rot360 + intake_lobe_center)
@@ -107,19 +103,19 @@ public node porsche_v10_camshaft_builder {
         .add_lobe(rot360 + intake_lobe_center + 1 * rot144)
 		
     _intake_cam_1
-        .add_lobe(rot360 + intake_lobe_center + 1 * rot76)
-        .add_lobe(rot360 + intake_lobe_center + 2 * rot144 + rot76)
-        .add_lobe(rot360 + intake_lobe_center + 3 * rot144 + rot76)
-        .add_lobe(rot360 + intake_lobe_center + 4 * rot144 + rot76)
-        .add_lobe(rot360 + intake_lobe_center + 1 * rot144 + rot76)
+        .add_lobe(rot360 + intake_lobe_center + 1 * rot68)
+        .add_lobe(rot360 + intake_lobe_center + 2 * rot144 + rot68)
+        .add_lobe(rot360 + intake_lobe_center + 3 * rot144 + rot68)
+        .add_lobe(rot360 + intake_lobe_center + 4 * rot144 + rot68)
+        .add_lobe(rot360 + intake_lobe_center + 1 * rot144 + rot68)
 }
 
 public node porsche_v10_camshaft {
     alias output __out:
         porsche_v10_camshaft_builder(
-            advance: -8 * units.deg,
-            intake_lobe_center: 117 * units.deg,
-            exhaust_lobe_center: 117 * units.deg);
+            advance: 0 * units.deg,
+            intake_lobe_center: 110 * units.deg,
+            exhaust_lobe_center: 110 * units.deg);
 }
 
 public node v10_high_intake {
@@ -163,7 +159,7 @@ public node porsche_980_01 {
     engine engine(
         name: "Porsche 980/01",
         starter_torque: 200 * units.lb_ft,
-        starter_speed: 800 * units.rpm,
+        starter_speed: 200 * units.rpm,
         redline: 8400 * units.rpm
     )
 
@@ -177,7 +173,7 @@ public node porsche_980_01 {
         moment_of_inertia: 0.22986844776863666 * 0.75,
         position_x: 0.0,
         position_y: 0.0,
-        tdc: 68*units.deg
+        tdc: 124*units.deg
     )
 
     rod_journal rj0(angle: 0)
@@ -186,27 +182,16 @@ public node porsche_980_01 {
 	rod_journal rj6(angle: 4 * cycle144)
 	rod_journal rj8(angle: 1 * cycle144)
 	
-	rod_journal rj1(angle: -cycle144-cycle68)
-	rod_journal rj3(angle: -cycle144-cycle68 + 2 * cycle144)
-	rod_journal rj5(angle: -cycle144-cycle68 + 3 * cycle144)
-	rod_journal rj7(angle: -cycle144-cycle68 + 4 * cycle144)
-	rod_journal rj9(angle: -cycle144-cycle68 + 1 * cycle144)
-	
     c0
         .add_rod_journal(rj0)
-		.add_rod_journal(rj1)
 		.add_rod_journal(rj2)
-		.add_rod_journal(rj3)
         .add_rod_journal(rj4)
-		.add_rod_journal(rj5)
 		.add_rod_journal(rj6)
-		.add_rod_journal(rj7)
 		.add_rod_journal(rj8)
-		.add_rod_journal(rj9)
 
     piston_parameters piston_params(
         mass: 400 * units.g,
-        //blowby: k_28inH2O(0.1),
+        //blowby: k_28inH2O(0.05),
         compression_height: 1.22 * units.inch,
         wrist_pin_position: 0.0,
         displacement: 0.0
@@ -225,17 +210,17 @@ public node porsche_980_01 {
     )
 
     v10_high_intake intake(
-        carburetor_cfm: 1100.0,
+        carburetor_cfm: 1500.0,
         idle_flow_rate_cfm: 0.007,
-        idle_throttle_plate_position: 0.981,
+        idle_throttle_plate_position: 0.983,
         throttle_gamma: 1.5
     )
 
     exhaust_system_parameters es_params(
         outlet_flow_rate: k_carb(1500.0),
         primary_tube_length: 10.0 * units.inch,
-        primary_flow_rate: k_carb(550.0),
-        velocity_decay: 0.5, //0.5
+        primary_flow_rate: k_carb(650.0),
+        velocity_decay: 1.0, //0.5
         volume: 50.0 * units.L
     )
 	
@@ -245,10 +230,10 @@ public node porsche_980_01 {
     exhaust_system exhaust0(es_params, audio_volume: 8.0, impulse_response: ir0)
 	exhaust_system exhaust1(es_params, audio_volume: 10.0, impulse_response: ir1)
 
-    cylinder_bank b0(bank_params, angle: -34 * units.deg)
+    cylinder_bank b0(bank_params, angle: 34 * units.deg)
     b0
         .add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj0,
             intake: intake,
@@ -256,7 +241,7 @@ public node porsche_980_01 {
             ignition_wire: wires.wire1
         )
         .add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj2,
             intake: intake,
@@ -264,7 +249,7 @@ public node porsche_980_01 {
             ignition_wire: wires.wire3
         )
         .add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj4,
             intake: intake,
@@ -272,7 +257,7 @@ public node porsche_980_01 {
             ignition_wire: wires.wire5
         )
         .add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj6,
             intake: intake,
@@ -280,7 +265,7 @@ public node porsche_980_01 {
             ignition_wire: wires.wire7
         )
         .add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj8,
             intake: intake,
@@ -288,52 +273,52 @@ public node porsche_980_01 {
             ignition_wire: wires.wire9
         )
 		
-    cylinder_bank b1(bank_params, angle: 34 * units.deg)
+    cylinder_bank b1(bank_params, angle: -34 * units.deg)
     b1
 		.add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj1,
+            rod_journal: rj0,
             intake: intake,
             exhaust_system: exhaust1,
             ignition_wire: wires.wire2
         )
 		.add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj3,
+            rod_journal: rj2,
             intake: intake,
             exhaust_system: exhaust1,
             ignition_wire: wires.wire4
         )
 		.add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj5,
+            rod_journal: rj4,
             intake: intake,
             exhaust_system: exhaust0,
             ignition_wire: wires.wire6
         )
 		.add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj7,
+            rod_journal: rj6,
             intake: intake,
             exhaust_system: exhaust0,
             ignition_wire: wires.wire8
         )
 		.add_cylinder(
-            piston: piston(piston_params, blowby: k_28inH2O(0.1)),
+            piston: piston(piston_params, blowby: k_28inH2O(0.05)),
             connecting_rod: connecting_rod(cr_params),
-            rod_journal: rj9,
+            rod_journal: rj8,
             intake: intake,
             exhaust_system: exhaust0,
             ignition_wire: wires.wire10
         )
 
     engine
-        .add_cylinder_bank(b0)
 		.add_cylinder_bank(b1)
+        .add_cylinder_bank(b0)
 
 	engine.add_crankshaft(c0)
 	
@@ -358,15 +343,15 @@ public node porsche_980_01 {
 
     function timing_curve(1000 * units.rpm)
     timing_curve
-        .add_sample(0000 * units.rpm, 20 * units.deg)
-        .add_sample(1000 * units.rpm, 20 * units.deg)
-        .add_sample(2000 * units.rpm, 30 * units.deg)
-        .add_sample(3000 * units.rpm, 37 * units.deg)
-        .add_sample(4000 * units.rpm, 46 * units.deg)
-        .add_sample(5000 * units.rpm, 50 * units.deg)
-        .add_sample(6000 * units.rpm, 55 * units.deg)
-        .add_sample(7000 * units.rpm, 60 * units.deg)
-		.add_sample(8000 * units.rpm, 60 * units.deg)
+        .add_sample(0000 * units.rpm, (20 + ign_offset) * units.deg)
+        .add_sample(1000 * units.rpm, (20 + ign_offset) * units.deg)
+        .add_sample(2000 * units.rpm, (30 + ign_offset) * units.deg)
+        .add_sample(3000 * units.rpm, (37 + ign_offset) * units.deg)
+        .add_sample(4000 * units.rpm, (46 + ign_offset) * units.deg)
+        .add_sample(5000 * units.rpm, (50 + ign_offset) * units.deg)
+        .add_sample(6000 * units.rpm, (55 + ign_offset) * units.deg)
+        .add_sample(7000 * units.rpm, (55 + ign_offset) * units.deg)
+		.add_sample(8000 * units.rpm, (55 + ign_offset) * units.deg)
 
     engine.add_ignition_module(
         porsche_v10_distributor(
