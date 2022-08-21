@@ -22,3 +22,4 @@ set_engine(
 | JPN | HONDA | C30A | V6 | 3.0 | honda_c30a | kirbyguy22 |
 | USA | DODGE | VIPER SR II | V10 | 8.0 | dodge_viper_srii | kirbyguy22 |
 | GER | PORSCHE | 980/01 | V10 | 5.7 | porsche_980_01 | kirbyguy22 |
+| GER | BMW | S70/2 | V12 | 6.1 | bmw_s70_2 | kirbyguy22 |
