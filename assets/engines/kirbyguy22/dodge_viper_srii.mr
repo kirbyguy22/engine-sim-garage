@@ -1,8 +1,8 @@
 import "engine_sim.mr"
-import "../../part-library/part_library.mr"
 
 units units()
 constants constants()
+impulse_response_library ir_lib()
 
 label cycle(2 * 360 * units.deg)
 label cycle144( 144 * units.deg)
@@ -212,7 +212,7 @@ public node dodge_viper_srii {
     viper_intake intake(
         carburetor_cfm: 950.0,
         idle_flow_rate_cfm: 0.007,
-        idle_throttle_plate_position: 0.976,
+        idle_throttle_plate_position: 0.996,
         throttle_gamma: 1.5
     )
 
@@ -224,11 +224,8 @@ public node dodge_viper_srii {
         volume: 50.0 * units.L
     )
 
-
-    impulse_response ir0(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.01)
-	impulse_response ir1(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.01)
-    exhaust_system exhaust0(es_params, audio_volume: 8.0, impulse_response: ir0)
-	exhaust_system exhaust1(es_params, audio_volume: 10.0, impulse_response: ir1)
+    exhaust_system exhaust0(es_params, audio_volume: 8.0, impulse_response: ir_lib.default_0)
+	exhaust_system exhaust1(es_params, audio_volume: 10.0, impulse_response: ir_lib.default_0)
 
     cylinder_bank b0(bank_params, angle: -45 * units.deg)
     b0
@@ -358,4 +355,27 @@ public node dodge_viper_srii {
             rev_limit: 6000 * units.rpm,
 			limiter_duration: 0.1
         ))
+}
+
+public node dodge_viper_gts_srii {
+	alias output __out: vehicle;
+	vehicle vehicle(
+		mass: 1530,
+		drag_coefficient: 0.35,
+		cross_sectional_area: (75.7 * units.inch) * (39.1 * units.inch),
+		diff_ratio: 3.07,
+		tire_radius: 13.1 * units.inch,
+		rolling_resistance: 2000
+		)
+}
+
+public node dodge_viper_srii_transmission {
+    alias output __out:
+        transmission()
+            .add_gear(2.66)
+			.add_gear(1.78)
+			.add_gear(1.30)
+			.add_gear(1.0)
+			.add_gear(0.74)
+			.add_gear(0.50);
 }

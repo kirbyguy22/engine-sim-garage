@@ -26,6 +26,7 @@ set_engine(
 | GBR | COSWORTH | DFV | V8 | 3.0 | cosworth_dfv | kirbyguy22 |
 
 ## Available Vehicle Configurations (0.1.9a+)
-| Origin | Manufacturer | Model | Type | Vehicle Node Name | Transmission Node Name | Author |
-| --- | ------------ | ------ | ------ | ---------------- | ---------- | ------ |
-| GBR | LOTUS | 49 | Racing | lotus49 | lotus49_transmission | kirbyguy22 |
+| Origin | Year |  Manufacturer | Model | Type | Vehicle Node Name | Transmission Node Name | Author |
+| --- | ---- | ------------ | ------ | ------ | ---------------- | ---------- | ------ |
+| GBR | 1967 | LOTUS | 49 | Racing | lotus49 | lotus49_transmission | kirbyguy22 |
+| USA | 1996 | DODGE | Viper GTS | Road | dodge_viper_gts_srii | dodge_viper_srii_transmission | kirbyguy22 |
