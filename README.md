@@ -1,7 +1,7 @@
 # engine-sim-garage
  An unofficial repository for custom parts and engines for AngeTheGreat's Engine Simulator: https://github.com/ange-yaghi/engine-sim
 
-Tested working on Build v0.1.8a.
+Tested working on Build v0.1.9a.
 
 ## Installing an engine
 1. Clone/download the repo and copy the `assets` folder from it into the `engine-sim` root folder.
@@ -23,3 +23,9 @@ set_engine(
 | USA | DODGE | VIPER SR II | V10 | 8.0 | dodge_viper_srii | kirbyguy22 |
 | GER | PORSCHE | 980/01 | V10 | 5.7 | porsche_980_01 | kirbyguy22 |
 | GER | BMW | S70/2 | V12 | 6.1 | bmw_s70_2 | kirbyguy22 |
+| GBR | COSWORTH | DFV | V8 | 3.0 | cosworth_dfv | kirbyguy22 |
+
+## Available Vehicle Configurations (0.1.9a+)
+| Origin | Manufacturer | Model | Type | Vehicle Node Name | Transmission Node Name | Author |
+| --- | ------------ | ------ | ------ | ---------------- | ---------- | ------ |
+| GBR | LOTUS | 49 | Racing | lotus49 | lotus49_transmission | kirbyguy22 |
