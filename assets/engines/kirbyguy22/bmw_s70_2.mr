@@ -221,7 +221,7 @@ public node bmw_s70_2 {
     s702_intake intake(
         carburetor_cfm: 1100.0,
         idle_flow_rate_cfm: 0.007,
-        idle_throttle_plate_position: 0.982,
+        idle_throttle_plate_position: 0.996,
         throttle_gamma: 1.5
     )
 
@@ -233,7 +233,7 @@ public node bmw_s70_2 {
         volume: 50.0 * units.L
     )
 
-    exhaust_system exhaust0(es_params, audio_volume: 0.5, impulse_response: ir_lib.default_0)
+    exhaust_system exhaust0(es_params, audio_volume: 0.9, impulse_response: ir_lib.default_0)
 	exhaust_system exhaust1(es_params, audio_volume: 1.0, impulse_response: ir_lib.default_0)
 
     cylinder_bank b0(bank_params, angle: 30 * units.deg)

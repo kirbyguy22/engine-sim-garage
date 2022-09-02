@@ -1,17 +1,19 @@
 import "engine_sim.mr"
-import "../../part-library/part_library.mr"
 
 units units()
 constants constants()
+impulse_response_library ir_lib()
 
 label cycle(2 * 360 * units.deg)
+label ign_offset(18)
 
 public node c30a_distributor {
     input wires;
     input timing_curve;
     input rev_limit: 8000 * units.rpm;
+	input limiter_duration: 0.06;
     alias output __out:
-        ignition_module(timing_curve: timing_curve, rev_limit: rev_limit)
+        ignition_module(timing_curve: timing_curve, rev_limit: rev_limit, limiter_duration: limiter_duration)
             .connect_wire(wires.wire1, (0.0 / 6.0) * cycle)
             .connect_wire(wires.wire2, (1.0 / 6.0) * cycle)
             .connect_wire(wires.wire3, (2.0 / 6.0) * cycle)
@@ -24,7 +26,7 @@ public node c30a_camshaft_builder {
     input lobe_profile: comp_cams_magnum_11_470_8_lobe_profile();
     input intake_lobe_profile: lobe_profile;
     input exhaust_lobe_profile: lobe_profile;
-    input lobe_separation: 106.0 * units.deg;
+    input lobe_separation: 112.0 * units.deg;
     input intake_lobe_center: lobe_separation;
     input exhaust_lobe_center: lobe_separation;
     input advance: 0.0 * units.deg;
@@ -49,24 +51,24 @@ public node c30a_camshaft_builder {
     label rot360(360 * units.deg)
 
     _exhaust_cam_0
-        .add_lobe(rot360 - exhaust_lobe_center)
-        .add_lobe(rot360 - exhaust_lobe_center + 2 * rot)
-		.add_lobe(rot360 - exhaust_lobe_center + 4 * rot)
+        .add_lobe(rot360 - exhaust_lobe_center - 0.03)
+        .add_lobe(rot360 - exhaust_lobe_center + 2 * rot + 0.04)
+		.add_lobe(rot360 - exhaust_lobe_center + 4 * rot + 0.06)
 		
     _exhaust_cam_1
-        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot)
-        .add_lobe(rot360 - exhaust_lobe_center + 3 * rot)
-		.add_lobe(rot360 - exhaust_lobe_center + 5 * rot)
+        .add_lobe(rot360 - exhaust_lobe_center + 1 * rot - 0.03)
+        .add_lobe(rot360 - exhaust_lobe_center + 3 * rot + 0.04)
+		.add_lobe(rot360 - exhaust_lobe_center + 5 * rot + 0.05)
 
     _intake_cam_0
-        .add_lobe(rot360 + intake_lobe_center)
-        .add_lobe(rot360 + intake_lobe_center + 2 * rot)
-		.add_lobe(rot360 + intake_lobe_center + 4 * rot)
+        .add_lobe(rot360 + intake_lobe_center + 0.06)
+        .add_lobe(rot360 + intake_lobe_center + 2 * rot + 0.02)
+		.add_lobe(rot360 + intake_lobe_center + 4 * rot - 0.02)
 		
     _intake_cam_1
-        .add_lobe(rot360 + intake_lobe_center + 1 * rot)
-        .add_lobe(rot360 + intake_lobe_center + 3 * rot)
-		.add_lobe(rot360 + intake_lobe_center + 5 * rot)
+        .add_lobe(rot360 + intake_lobe_center + 1 * rot + 0.05)
+        .add_lobe(rot360 + intake_lobe_center + 3 * rot + 0.03)
+		.add_lobe(rot360 + intake_lobe_center + 5 * rot - 0.02)
 }
 
 public node c30a_camshaft {
@@ -92,7 +94,7 @@ public node honda_c30a {
     engine engine(
         name: "Honda C30A V6",
         starter_torque: 100 * units.lb_ft,
-        starter_speed: 300 * units.rpm,
+        starter_speed: 400 * units.rpm,
         redline: 8000 * units.rpm
     )
 
@@ -106,7 +108,7 @@ public node honda_c30a {
         moment_of_inertia: 0.22986844776863666 * 1,
         position_x: 0.0,
         position_y: 0.0,
-        tdc: -4 * constants.pi / 4.0 - constants.pi/6
+        tdc: 3.0 * constants.pi/4.0
     )
 
     rod_journal rj0(angle: 0.0 * constants.pi / 3.0)
@@ -146,34 +148,30 @@ public node honda_c30a {
     )
 
     performer_rpm_intake intake(
-        carburetor_cfm: 850.0,
+        carburetor_cfm: 550.0,
         idle_flow_rate_cfm: 0.007,
-        idle_throttle_plate_position: 0.985,
+        idle_throttle_plate_position: 0.996,
         throttle_gamma: 1.5
     )
 
     exhaust_system_parameters es_params(
-        outlet_flow_rate: k_carb(1250.0),
+        outlet_flow_rate: k_carb(450.0),
         primary_tube_length: 10.0 * units.inch,
-        primary_flow_rate: k_carb(350.0),
+        primary_flow_rate: k_carb(250.0),
         velocity_decay: 0.4, //0.5
         volume: 50.0 * units.L
     )
 	
     exhaust_system_parameters es_params1(
-        outlet_flow_rate: k_carb(1250.0),
+        outlet_flow_rate: k_carb(450.0),
         primary_tube_length: 20.0 * units.inch,
-        primary_flow_rate: k_carb(350.0),
+        primary_flow_rate: k_carb(250.0),
         velocity_decay: 0.6, //0.5
         volume: 50.0 * units.L
     )
 
-    impulse_response ir0(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.0009)
-	impulse_response ir1(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.001)
-	impulse_response ir2(filename: "../../sound-library/smooth/smooth_39.wav", volume: 0.0025)
-    exhaust_system exhaust0(es_params, audio_volume: 10.0, impulse_response: ir0)
-	exhaust_system exhaust1(es_params1, audio_volume: 8.0, impulse_response: ir1)
-	exhaust_system exhaust2(es_params, audio_volume: 3.0, impulse_response: ir2)
+    exhaust_system exhaust0(es_params, audio_volume: 1.0, impulse_response: ir_lib.default_0)
+	exhaust_system exhaust1(es_params, audio_volume: 0.4, impulse_response: ir_lib.default_0)
 
     cylinder_bank b0(bank_params, angle: 45 * units.deg)
     b0
@@ -183,6 +181,7 @@ public node honda_c30a {
             rod_journal: rj0,
             intake: intake,
             exhaust_system: exhaust0,
+			sound_attenuation: 0.7,
             ignition_wire: wires.wire1
         )
         .add_cylinder(
@@ -190,7 +189,8 @@ public node honda_c30a {
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj2,
             intake: intake,
-            exhaust_system: exhaust1,
+            exhaust_system: exhaust0,
+			sound_attenuation: 0.9,
             ignition_wire: wires.wire3
         )
         .add_cylinder(
@@ -210,6 +210,7 @@ public node honda_c30a {
             rod_journal: rj1,
             intake: intake,
             exhaust_system: exhaust1,
+			sound_attenuation: 0.8,
             ignition_wire: wires.wire2
         )
 		.add_cylinder(
@@ -217,7 +218,7 @@ public node honda_c30a {
             connecting_rod: connecting_rod(cr_params),
             rod_journal: rj3,
             intake: intake,
-            exhaust_system: exhaust0,
+            exhaust_system: exhaust1,
             ignition_wire: wires.wire4
         )
 		.add_cylinder(
@@ -226,6 +227,7 @@ public node honda_c30a {
             rod_journal: rj5,
             intake: intake,
             exhaust_system: exhaust1,
+			sound_attenuation: 0.9,
             ignition_wire: wires.wire6
         )
 
@@ -256,13 +258,13 @@ public node honda_c30a {
 
     function timing_curve(1000 * units.rpm)
     timing_curve
-        .add_sample(0000 * units.rpm, 12 * units.deg)
-        .add_sample(1000 * units.rpm, 12 * units.deg)
-        .add_sample(2000 * units.rpm, 20 * units.deg)
-        .add_sample(3000 * units.rpm, 30 * units.deg)
-        .add_sample(4000 * units.rpm, 38 * units.deg)
-        .add_sample(5000 * units.rpm, 38 * units.deg)
-        .add_sample(6000 * units.rpm, 38 * units.deg)
+        .add_sample(0000 * units.rpm, (12 + ign_offset) * units.deg)
+        .add_sample(1000 * units.rpm, (12 + ign_offset) * units.deg)
+        .add_sample(2000 * units.rpm, (20 + ign_offset) * units.deg)
+        .add_sample(3000 * units.rpm, (30 + ign_offset) * units.deg)
+        .add_sample(4000 * units.rpm, (38 + ign_offset) * units.deg)
+        .add_sample(5000 * units.rpm, (38 + ign_offset) * units.deg)
+        .add_sample(6000 * units.rpm, (38 + ign_offset) * units.deg)
 
     engine.add_ignition_module(
         c30a_distributor(
@@ -270,4 +272,26 @@ public node honda_c30a {
             timing_curve: timing_curve,
             rev_limit: 8000 * units.rpm
         ))
+}
+
+public node honda_nsx_na {
+	alias output __out: vehicle;
+	vehicle vehicle(
+		mass: 1370,
+		drag_coefficient: 0.32,
+		cross_sectional_area: (71.3 * units.inch) * (38.7 * units.inch),
+		diff_ratio: 4.06,
+		tire_radius: 12.45 * units.inch,
+		rolling_resistance: 2000
+		)
+}
+
+public node honda_nsx_na_transmission {
+    alias output __out:
+        transmission()
+            .add_gear(3.071)
+			.add_gear(1.727)
+			.add_gear(1.230)
+			.add_gear(0.967)
+			.add_gear(0.771);
 }
