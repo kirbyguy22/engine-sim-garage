@@ -30,3 +30,4 @@ set_engine(
 | --- | ---- | ------------ | ------ | ------ | ---------------- | ---------- | ------ |
 | GBR | 1967 | LOTUS | 49 | Racing | lotus49 | lotus49_transmission | kirbyguy22 |
 | USA | 1996 | DODGE | Viper GTS | Road | dodge_viper_gts_srii | dodge_viper_srii_transmission | kirbyguy22 |
+| JPN | 1991 | HONDA | NSX | Road | honda_nsx_na | honda_nsx_na_transmission | kirbyguy22 |
